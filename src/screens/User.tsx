@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const User = () => {
+  const [users, setUsers] = useState([]);
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -11,13 +13,19 @@ const User = () => {
   const getUsers = async () => {
     try {
       const email = await AsyncStorage.getItem('email');
+      console.log('Current Email:', email);
+
       const snapshot = await firestore()
         .collection('users')
-        .where('email', '!=', email)
         .get();
 
       if (!snapshot.empty) {
-        console.log(JSON.stringify(snapshot.docs[0].data()));
+        // filter out logged-in user
+        const allUsers = snapshot.docs
+          .map(doc => doc.data())
+          .filter(user => user.email !== email);
+
+        setUsers(allUsers);
       } else {
         console.log('No users found');
       }
@@ -46,13 +54,21 @@ export default User;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     backgroundColor: '#fff',
   },
   text: {
     fontSize: 22,
     textAlign: 'center',
     fontWeight: '600',
+  },
+  userCard: {
+    padding: 15,
+    margin: 10,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 8,
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
