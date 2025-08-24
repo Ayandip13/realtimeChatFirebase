@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  Image,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,16 +22,15 @@ const User = () => {
       const email = await AsyncStorage.getItem('email');
       console.log('Current Email:', email);
 
-      const snapshot = await firestore()
-        .collection('users')
-        .get();
+      const snapshot = await firestore().collection('users').get();
+      console.log('Total users in Firestore:', snapshot.size);
 
       if (!snapshot.empty) {
-        // filter out logged-in user
         const allUsers = snapshot.docs
           .map(doc => doc.data())
           .filter(user => user.email !== email);
 
+        console.log('Filtered users:', allUsers); // 👈 check fields
         setUsers(allUsers);
       } else {
         console.log('No users found');
@@ -36,15 +42,23 @@ const User = () => {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          alignItems: 'center',
-          backgroundColor: '#d6d6d6ff',
-          padding: 20,
-        }}
-      >
+      {/* Header */}
+      <View style={styles.header}>
         <Text style={styles.text}>Firebase Chat</Text>
       </View>
+
+      {/* User List */}
+      <FlatList
+        style={{ flex: 1 }}
+        data={users}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.userItem}>
+            <Image source={require('../assets/user.png')} style={styles.userIcon} />
+            <Text>{item.name || 'No name'}</Text>
+          </View>
+        )}
+      />
     </View>
   );
 };
@@ -56,19 +70,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  header: {
+    alignItems: 'center',
+    backgroundColor: '#d6d6d6ff',
+    padding: 20,
+  },
   text: {
     fontSize: 22,
     textAlign: 'center',
     fontWeight: '600',
   },
-  userCard: {
-    padding: 15,
-    margin: 10,
-    backgroundColor: '#f1f1f1',
+  userItem: {
+    width: Dimensions.get('window').width - 50,
+    alignSelf: 'center',
+    marginTop: 10,
+    padding: 10,
+    borderWidth: 0.5,
+    borderColor: '#000',
     borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   userName: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  userIcon: {
+    width: 50,
+    height: 50,
   },
 });
