@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
+    columnGap: 10,
   },
   userName: {
     fontSize: 18,
