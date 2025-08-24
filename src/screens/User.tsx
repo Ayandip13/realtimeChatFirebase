@@ -5,13 +5,16 @@ import {
   FlatList,
   Dimensions,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const User = () => {
   const [users, setUsers] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     getUsers();
@@ -53,10 +56,16 @@ const User = () => {
         data={users}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <View style={styles.userItem}>
-            <Image source={require('../assets/user.png')} style={styles.userIcon} />
-            <Text>{item.name || 'No name'}</Text>
-          </View>
+          <TouchableOpacity
+            style={styles.userItem}
+            onPress={() => navigation.navigate('Chat', { data: item })}
+          >
+            <Image
+              source={require('../assets/user.png')}
+              style={styles.userIcon}
+            />
+            <Text style={styles.userName}>{item.name || 'No name'}</Text>
+          </TouchableOpacity>
         )}
       />
     </View>

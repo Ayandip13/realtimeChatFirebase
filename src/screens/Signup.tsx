@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
@@ -144,7 +138,11 @@ const Signup = () => {
           }}
         >
           <Text
-            style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 15 }}
+            style={{
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 15,
+            }}
           >
             Signup
           </Text>
