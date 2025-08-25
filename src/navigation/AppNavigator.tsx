@@ -36,7 +36,7 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Chat"
           component={Chat}
-          options={{ headerShown: true, headerTitleAlign: 'center' }}
+          options={{ headerShown: false, headerTitleAlign: 'center' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
