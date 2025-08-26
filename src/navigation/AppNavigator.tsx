@@ -7,6 +7,7 @@ import Signup from '../screens/Signup';
 import Login from '../screens/Login';
 import Main from '../screens/Main';
 import Chat from '../screens/Chat';
+import Settings from '../screens/Settings';
 
 const Stack = createStackNavigator();
 const AppNavigator = () => {
@@ -36,6 +37,11 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Chat"
           component={Chat}
+          options={{ headerShown: false, headerTitleAlign: 'center' }}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={Settings}
           options={{ headerShown: false, headerTitleAlign: 'center' }}
         />
       </Stack.Navigator>
